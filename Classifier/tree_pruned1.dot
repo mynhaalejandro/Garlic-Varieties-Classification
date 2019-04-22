@@ -1,0 +1,16 @@
+digraph Tree {
+node [shape=box] ;
+0 [label="mean_b <= 209.654\ngini = 0.856\nsamples = 658\nvalue = [90, 90, 91, 105, 106, 99, 77]\nclass = mmsu_gem"] ;
+1 [label="mean_s <= 22.861\ngini = 0.84\nsamples = 550\nvalue = [35, 90, 89, 104, 102, 92, 38]\nclass = mexican"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="gini = 0.83\nsamples = 523\nvalue = [22, 90, 89, 104, 102, 90, 26]\nclass = mexican"] ;
+1 -> 2 ;
+3 [label="gini = 0.565\nsamples = 27\nvalue = [13, 0, 0, 0, 0, 2, 12]\nclass = batanes"] ;
+1 -> 3 ;
+4 [label="mean_h <= 65.908\ngini = 0.604\nsamples = 108\nvalue = [55, 0, 2, 1, 4, 7, 39]\nclass = batanes"] ;
+0 -> 4 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+5 [label="gini = 0.642\nsamples = 83\nvalue = [32, 0, 2, 1, 4, 7, 37]\nclass = vfta"] ;
+4 -> 5 ;
+6 [label="gini = 0.147\nsamples = 25\nvalue = [23, 0, 0, 0, 0, 0, 2]\nclass = batanes"] ;
+4 -> 6 ;
+}

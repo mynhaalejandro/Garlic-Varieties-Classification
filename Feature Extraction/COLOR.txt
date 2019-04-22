@@ -1,0 +1,13 @@
+COLOR: Standard dev. of 3rd channel of HSV - checked
+COLOR: Normalized difference index in RGB - http://ceholden.github.io/open-geo-tutorial/python/chapter_2_indices.html
+COLOR: Gray channel in YIQ space - https://github.com/claudiomarpda/image_processing/blob/master/assignment1/color.py
+COLOR: Normalized mean 3rd channel of CMY - https://stackoverflow.com/questions/14088375/how-can-i-convert-rgb-to-cmyk-and-vice-versa-in-python
+https://gist.github.com/Amr-Abd-El-Latief/9f3fe3261eee4aa26ccb
+
+
+COLOR SPACES - http://mathalope.co.uk/2015/05/24/opencv-python-color-space-conversion-methods/
+
+,'mean_h','mean_s','mean_v','std_h','std_s','std_v','class'
+
+cols = ['mean_r','mean_g','mean_b','std_r','std_g','std_b']
+cols = ['mean_h','mean_s','mean_v','std_h','std_s','std_v']

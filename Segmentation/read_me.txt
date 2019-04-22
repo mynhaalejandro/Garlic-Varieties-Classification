@@ -1,0 +1,1 @@
+A code that separates the garlic object from the background.
