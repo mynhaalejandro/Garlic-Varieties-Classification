@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def loadImages(path = "C:/Users/Mynha/Desktop/Dataset/batanes/"):
+def loadImages(path = "C:/Users/Mynha/Desktop/Dataset/batanes/T/"):
 	return [os.path.join(path, f) for f in os.listdir(path) if f.endswith(".jpg")]
 
 
@@ -15,39 +15,41 @@ df = pd.DataFrame([], columns=cols)
 
 filenames = loadImages()
 images = []
+count = 1
 for file in filenames:
 	a = cv2.imread(file)
-	print(file)
-
+	print count,' ', file
+	count += 1
 	clone = a.copy()
 	clone1 = a.copy()
 
 	## Convert to Grayscale, HSV, Binary using Watershed Algo
 	gray = cv2.cvtColor(clone, cv2.COLOR_BGR2GRAY)
+	blur = cv2.GaussianBlur(gray, (15,15),0) 
 	hsv = cv2.cvtColor(clone, cv2.COLOR_BGR2HSV)
-	ret, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+	ret, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 	## Noise removal
-	kernel = np.ones((5,5),np.uint8) # (5, top) (3, bot,sides)
+	kernel = np.ones((30,30),np.uint8) # (5, top) (3, bot,sides) = 5
 	opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations = 2)
 	closing = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations = 2)
 	## Sure background area
-	sure_bg = cv2.dilate(closing, kernel, iterations=3)
+	sure_bg = cv2.dilate(opening, kernel, iterations=3)
 
 	## Get contour points		
 	contours, hierarchy = cv2.findContours(sure_bg, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 	contour_list = []
 	for contour in contours:
 		area = cv2.contourArea(contour)
-		if (area >= 100000 and area <= 900000): # (4-9, top) (1-9, bot,sides)
+		if (area >= 400000 and area <= 900000): # (4-9, top) (1-9, bot,sides)
 			contour_list.append(contour)
 			lst_bgr = []
 			lst_hsv = []
 			lst_gray = []
 			lst_w = []
-			cv2.drawContours(clone, contour_list, -1, (0, 255, 0), 2)
+			# cv2.drawContours(clone, contour_list, -1, (0, 255, 0), 2)
 
 			for i in range(len(contour_list)):
-				## Thresholded Image(Binary)
+				## Thresholded Image(Binary)2018-11-06 07.57.30 1
 				cimg = np.zeros((clone.shape[0],clone.shape[1]), np.uint8)
 				cv2.drawContours(cimg, contour_list, i, color=255, thickness=-1)
 				## Cropped Image
@@ -132,17 +134,22 @@ for file in filenames:
 				# whiteness = len(whiteness)
 					
 
-					# np.savetxt('white.csv', arr_w, delimiter=',', fmt='%.18g')
+				# np.savetxt('white.csv', arr_w, delimiter=',', fmt='%.18g')
 
 				# print 'whole garlic', garlic
 				# print 'white pixels', whiteness
 
+
+
 				pixel_w = whiteness / garlic
+				# print whiteness
+				# print garlic
 				print pixel_w
 				# print "Whiteness:", type(pixel_w)
-				# plt.imshow(mask_w, cmap='gray')
+				# plt.imshow(cimg, cmap='gray')
 				# plt.show()
 
+				cv2.imwrite("C:/Users/Mynha/Desktop/Dataset/results/batanes/T/thresholded_top_b_{}.png".format(len(images)+1), cimg)
 
 				# Save to CSV File
 				# varieties = '0'
@@ -150,7 +157,6 @@ for file in filenames:
 				# df_temp = pd.DataFrame(dict)
 				# df = df.append(df_temp, sort=False, ignore_index=True)
 				# df.to_csv('color_features1.csv')
-
-
+	images.append(arr_w)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

@@ -18,6 +18,8 @@ for file in filenames:
 
 	## Convert to Grayscale, Binary using Watershed Algo
 	gray = cv2.cvtColor(clone, cv2.COLOR_BGR2GRAY)
+	blur = cv2.GaussianBlur(gray, (5,5),0)
+
 	ret, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 	## Noise removal
 	kernel = np.ones((3,3),np.uint8) # 5, top 3, sides
@@ -26,10 +28,11 @@ for file in filenames:
 	## Sure background area
 	sure_bg = cv2.dilate(closing, kernel, iterations=3)
 
+	# plt.imshow(sure_bg, cmap='gray')
+	# plt.show()
+
 	## Get contour points		
 	contours, hierarchy = cv2.findContours(sure_bg, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-	plt.imshow(sure_bg)
-	plt.show()
 	contour_list = []
 	for contour in contours:
 		area = cv2.contourArea(contour)
@@ -61,8 +64,8 @@ for file in filenames:
 				cv2.imwrite("C:/Users/Mynha/Desktop/Garlic-Varieties-Classification/Segmentation/Results/thresholded_bot_{}.png".format(len(images)+1), cimg)
 				cv2.imwrite("C:/Users/Mynha/Desktop/Garlic-Varieties-Classification/Segmentation/Results/cropped_bot_{}.png".format(len(images)+1), mask)
 
-				# plt.imshow(cimg, cmap='gray')
-				# plt.show()
+				plt.imshow(cimg, cmap='gray')
+				plt.show()
 
 	images.append(arr)
 
