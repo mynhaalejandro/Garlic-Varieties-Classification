@@ -69,6 +69,7 @@ for file in filenames:
 				# print 'width', width
 				# plt.imshow(a)
 				# plt.show()
+				
 
 				# arr -> list of the pixel values of the garlic object
 

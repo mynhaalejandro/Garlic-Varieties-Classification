@@ -27,8 +27,8 @@ decision_tree_classifier.fit(X_train, Y_train)
 # Evaluate the classifier on the testing set using classification accuracy
 decision_tree_classifier.score(X_test, Y_test)
 
-print("Accuracy on training set: {:.0f}%".format((decision_tree_classifier.score(X_train, Y_train))*100))
-print("Accuracy on test set: {:.0f}%".format((decision_tree_classifier.score(X_test, Y_test))*100))
+print("Accuracy on training set: {:.2f}%".format((decision_tree_classifier.score(X_train, Y_train))*100))
+print("Accuracy on test set: {:.2f}%".format((decision_tree_classifier.score(X_test, Y_test))*100))
 
 from sklearn import tree
 
