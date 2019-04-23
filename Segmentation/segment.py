@@ -4,7 +4,7 @@ import imutils
 import numpy as np
 import matplotlib.pyplot as plt
 
-def loadImages(path = "C:/Users/Mynha/Desktop/Garlic-Varieties-Classification/Segmentation/Images/bot/"):
+def loadImages(path = "C:/Users/Mynha/Desktop/Dataset/batanes/"):
 	return [os.path.join(path, f) for f in os.listdir(path) if f.endswith(".jpg")]
 
 filenames = loadImages()
@@ -28,6 +28,8 @@ for file in filenames:
 
 	## Get contour points		
 	contours, hierarchy = cv2.findContours(sure_bg, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+	plt.imshow(sure_bg)
+	plt.show()
 	contour_list = []
 	for contour in contours:
 		area = cv2.contourArea(contour)
@@ -55,7 +57,6 @@ for file in filenames:
 				lst_intensities.append(gray[height,width])
 				arr = lst_intensities[i]
 				# Pixel values of the Garlic Object
-				print arr
 
 				cv2.imwrite("C:/Users/Mynha/Desktop/Garlic-Varieties-Classification/Segmentation/Results/thresholded_bot_{}.png".format(len(images)+1), cimg)
 				cv2.imwrite("C:/Users/Mynha/Desktop/Garlic-Varieties-Classification/Segmentation/Results/cropped_bot_{}.png".format(len(images)+1), mask)

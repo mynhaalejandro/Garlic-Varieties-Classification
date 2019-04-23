@@ -1,3 +1,4 @@
+from __future__ import division
 import cv2
 import os
 import csv
@@ -5,11 +6,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def loadImages(path = "C:/Users/Mynha/Desktop/Garlic-Varieties-Classification/Dataset/"):
+def loadImages(path = "C:/Users/Mynha/Desktop/Dataset/batanes/"):
 	return [os.path.join(path, f) for f in os.listdir(path) if f.endswith(".jpg")]
 
 
-cols = ['mean_r','mean_g','mean_b','std_r','std_g','std_b','mean_h','mean_s','mean_v','std_h','std_s','std_v','varieties']
+cols = ['pixel_w','varieties']
 df = pd.DataFrame([], columns=cols)
 
 filenames = loadImages()
@@ -42,6 +43,7 @@ for file in filenames:
 			lst_bgr = []
 			lst_hsv = []
 			lst_gray = []
+			lst_w = []
 			cv2.drawContours(clone, contour_list, -1, (0, 255, 0), 2)
 
 			for i in range(len(contour_list)):
@@ -67,8 +69,7 @@ for file in filenames:
 				## Grayscale
 				lst_gray.append(gray[height,width])
 				arr_gray = lst_gray[i]
-				garlic = list(arr_gray)
-				garlic = len(garlic)
+				garlic = len(arr_gray)
 
 				## RGB
 				lst_bgr.append(a[height,width])
@@ -110,68 +111,45 @@ for file in filenames:
 				boundaries = [
 					([217, 217, 217], [255, 255, 255])
 				]
-				# loop over the boundaries
 				for (lower, upper) in boundaries:
-					# create NumPy arrays from the boundaries
 					lower = np.array(lower, dtype = "uint8")
 					upper = np.array(upper, dtype = "uint8")
 
-					# find the colors within the specified boundaries and apply
-					# the mask
 					mask_w = cv2.inRange(mask, lower, upper)
-					# output = cv2.bitwise_and(a, a, mask = mask_w)
-					lst_w = []
-					index = np.where(mask_w == 255)
-					h = index[0]
-					w = index[1]
-					lst_w.append(gray[h,w])
-					arr_w = lst_w[i]
-					whiteness = list(arr_w)
-					whiteness = len(whiteness)
-				
-				# np.savetxt('white.csv', arr_w, delimiter=',', fmt='%.18g')
 
+
+				# plt.imshow(mask_w)
+				# plt.show()
+				## Get White Pixels from Garlic Object
+				index = np.where(mask_w == 255)
+				h = index[0]
+				w = index[1]
+
+				lst_w.append(gray[h,w])
+				arr_w = lst_w[i]
+				whiteness = len(arr_w)
+				# whiteness = list(arr_w)
+				# whiteness = len(whiteness)
 					
 
-				plt.imshow(mask_w, cmap='gray')
-				plt.show()
+					# np.savetxt('white.csv', arr_w, delimiter=',', fmt='%.18g')
+
+				# print 'whole garlic', garlic
+				# print 'white pixels', whiteness
+
+				pixel_w = whiteness / garlic
+				print pixel_w
+				# print "Whiteness:", type(pixel_w)
+				# plt.imshow(mask_w, cmap='gray')
+				# plt.show()
 
 
 				# Save to CSV File
-				varieties = '0'
-				dict = {'mean_r': mean_r, 'mean_g': mean_g, 'mean_b': mean_b, 'std_r': std_r, 'std_g': std_g, 'std_b': std_b, 'mean_h': mean_h, 'mean_s': mean_s, 'mean_v': mean_v, 'std_h': std_h, 'std_s': std_s, 'std_v': std_v, 'varieties' : varieties}
-				df_temp = pd.DataFrame(dict)
-				df = df.append(df_temp, sort=False, ignore_index=True)
+				# varieties = '0'
+				# dict = {'pixel_w': pixel_w, 'varieties' : varieties}
+				# df_temp = pd.DataFrame(dict)
+				# df = df.append(df_temp, sort=False, ignore_index=True)
 				# df.to_csv('color_features1.csv')
-	images.append(arr_gray)
-
-
-print 'whole garlic', garlic
-print 'white pixels', whiteness
-
-percentWhitekPixel = whiteness / garlic
-print("Whiteness: {:.2f}%".format(percentWhitekPixel))
-
-# We use Boxplot, to vizualize the comparison of the different garlic varieties
-## By Single Image
-# batanes = images[0]
-# ilocos_pink = images[1]
-# ilocos_white = images[2]
-# mexican = images[3]
-# mmsu_gem = images[4]
-# tanbolters = images[5]
-# vfta = images[6]
-
-# fig = plt.figure(1)
-# fig.suptitle('Mean HUE', fontsize=14, fontweight='bold')
-# plt.xlabel("Different Garlic Varieties")
-# plt.ylabel("Pixel Intensity")
-# plt.boxplot([batanes, ilocos_pink, ilocos_white, mexican, mmsu_gem, tanbolters, vfta], 
-# 	labels=['batanes','ilocos_pink','ilocos_white','mexican', 'mmsu_gem', 'tanbolters', 'vfta'])
-# fig.savefig('Mean_Hue.png',dpi=100)
-# plt.show()
-
-## By Multiple Images - by appending the array of the images into one list
 
 
 cv2.waitKey(0)

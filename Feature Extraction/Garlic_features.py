@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def loadImages(path = "C:/Users/Mynha/Desktop/Garlic-Varieties-Classification/Segmentation/Images/sides/"):
+def loadImages(path = "C:/Users/Mynha/Desktop/Dataset/batanes/"):
 	return [os.path.join(path, f) for f in os.listdir(path) if f.endswith(".jpg")]
 
 
@@ -65,12 +65,6 @@ for file in filenames:
 				lst_hsv.append(hsv[height,width])
 				arr_hsv = lst_hsv[i]
 
-				# print 'height', height
-				# print 'width', width
-				# plt.imshow(a)
-				# plt.show()
-				
-
 				# arr -> list of the pixel values of the garlic object
 
 				# Color Based Features
@@ -99,13 +93,14 @@ for file in filenames:
 				raw_h = H.flatten()
 				raw_s = S.flatten()
 				raw_v = V.flatten()
+				
 
 				# Save to CSV File
 				varieties = '0'
 				dict = {'mean_r': mean_r, 'mean_g': mean_g, 'mean_b': mean_b, 'std_r': std_r, 'std_g': std_g, 'std_b': std_b, 'mean_h': mean_h, 'mean_s': mean_s, 'mean_v': mean_v, 'std_h': std_h, 'std_s': std_s, 'std_v': std_v, 'varieties' : varieties}
 				df_temp = pd.DataFrame(dict)
 				df = df.append(df_temp, sort=False, ignore_index=True)
-				# df.to_csv('color_features1.csv')
+				df.to_csv('color_features1.csv')
 	images.append(mean_h)
 
 # We use Boxplot, to vizualize the comparison of the different garlic varieties
@@ -125,7 +120,7 @@ plt.ylabel("Pixel Intensity")
 plt.boxplot([batanes, ilocos_pink, ilocos_white, mexican, mmsu_gem, tanbolters, vfta], 
 	labels=['batanes','ilocos_pink','ilocos_white','mexican', 'mmsu_gem', 'tanbolters', 'vfta'])
 # fig.savefig('Mean_Hue.png',dpi=100)
-plt.show()
+# plt.show()
 
 ## By Multiple Images - by appending the array of the images into one list
 
